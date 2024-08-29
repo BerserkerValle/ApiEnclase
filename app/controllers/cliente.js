@@ -1,120 +1,113 @@
-const db = require("../models");
+const db = require("../config/db.config.js");
 const Cliente = db.cliente;
 
-
 exports.create = (req, res) => {
+  let cliente = {};
 
-  if (!req.body.nombre || !req.body.apellido) {
-    res.status(400).send({
-      message: "El contenido no puede estar vacío"
+  try {
+    cliente.id_cliente = req.body.id_cliente;
+    cliente.nombre = req.body.nombre;
+    cliente.apellido = req.body.apellido;
+    cliente.razon_social = req.body.razon_social;
+    cliente.nit = req.body.nit;
+    cliente.direccion = req.body.direccion;
+    cliente.telefono = req.body.telefono;
+    cliente.email = req.body.email;
+    cliente.fecha_ingreso = req.body.fecha_ingreso;
+    cliente.estatus = req.body.estatus;
+
+    Cliente.create(cliente).then(result => {
+      res.status(200).json({
+        message: "Upload Successfully a Cliente with id = " + result.id_cliente,
+        cliente: result,
+      });
     });
-    return;
+  } catch (error) {
+    res.status(500).json({
+      message: "Fail!",
+      error: error.message
+    });
   }
+}
 
-
-  const cliente = {
-    id_cliente: req.body.id_cliente,
-    nombre: req.body.nombre,
-    apellido: req.body.apellido,
-    razon_social: req.body.razon_social,
-    nit: req.body.nit,
-    direccion: req.body.direccion,
-    telefono: req.body.telefono,
-    email: req.body.email,
-    fecha_ingreso: req.body.fecha_ingreso,
-    estatus: req.body.estatus
-  };
-
-
-  Cliente.create(cliente)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Ocurrió un error al crear el Cliente."
-      });
-    });
-};
-
-
-exports.findAll = (req, res) => {
+exports.retrieveAllClientes = (req, res) => {
   Cliente.findAll()
-    .then(data => {
-      res.send(data);
+    .then(clienteInfos => {
+      res.status(200).json({
+        message: "Get all Clientes' Infos Successfully!",
+        clientes: clienteInfos
+      });
     })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Ocurrió un error al recuperar los Clientes."
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error!",
+        error: error
       });
     });
-};
+}
 
+exports.getClienteById = (req, res) => {
+  let clienteId = req.params.id;
+  Cliente.findByPk(clienteId)
+    .then(cliente => {
+      res.status(200).json({
+        message: "Successfully Get a Cliente with id = " + clienteId,
+        cliente: cliente
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error!",
+        error: error
+      });
+    });
+}
 
-exports.findOne = (req, res) => {
-  const id = req.params.id;
+exports.updateById = async (req, res) => {
+  try {
+    let clienteId = req.params.id;
+    let cliente = await Cliente.findByPk(clienteId);
 
-  Cliente.findByPk(id)
-    .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `No se puede encontrar Cliente con id=${id}.`
+    if (!cliente) {
+      res.status(404).json({
+        message: "Not Found for updating a Cliente with id = " + clienteId,
+        cliente: "",
+        error: "404"
+      });
+    } else {
+      let updatedObject = {
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        razon_social: req.body.razon_social,
+        nit: req.body.nit,
+        direccion: req.body.direccion,
+        telefono: req.body.telefono,
+        email: req.body.email,
+        fecha_ingreso: req.body.fecha_ingreso,
+        estatus: req.body.estatus
+      };
+      let result = await Cliente.update(updatedObject, { returning: true, where: { id_cliente: clienteId } });
+
+      if (!result) {
+        res.status(500).json({
+          message: "Error -> Can not update a Cliente with id = " + req.params.id,
+          error: "Can NOT Updated",
         });
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Error al recuperar Cliente con id=" + id
+
+      res.status(200).json({
+        message: "Update successfully a Cliente with id = " + clienteId,
+        cliente: updatedObject,
       });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error -> Can not update a Cliente with id = " + req.params.id,
+      error: error.message
     });
-};
+  }
+}
 
-exports.update = (req, res) => {
-  const id = req.params.id;
-
-  Cliente.update(req.body, {
-    where: { id_cliente: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Cliente fue actualizado exitosamente."
-        });
-      } else {
-        res.send({
-          message: `No se puede actualizar Cliente con id=${id}. Tal vez Cliente no fue encontrado o req.body está vacío.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "Error al actualizar Cliente con id=" + id
-      });
-    });
-};
-
-exports.delete = (req, res) => {
-  const id = req.params.id;
-
-  Cliente.destroy({
-    where: { id_cliente: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Cliente fue eliminado exitosamente."
-        });
-      } else {
-        res.send({
-          message: `No se puede eliminar Cliente con id=${id}. Tal vez Cliente no fue encontrado.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || "No se pudo eliminar Cliente con id=" + id
-      });
-    });
-};
+exports.deleteBy
