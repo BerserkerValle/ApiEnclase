@@ -5,7 +5,6 @@ exports.create = (req, res) => {
   let cliente = {};
 
   try {
-    cliente.id_cliente = req.body.id_cliente;
     cliente.nombre = req.body.nombre;
     cliente.apellido = req.body.apellido;
     cliente.razon_social = req.body.razon_social;
@@ -110,4 +109,27 @@ exports.updateById = async (req, res) => {
   }
 }
 
-exports.deleteBy
+exports.deleteById = async (req, res) => {
+  try {
+    let clienteId = req.params.id;
+    let cliente = await Cliente.findByPk(clienteId);
+
+    if (!cliente) {
+      res.status(404).json({
+        message: "Does Not exist a Cliente with id = " + clienteId,
+        error: "404",
+      });
+    } else {
+      await cliente.destroy();
+      res.status(200).json({
+        message: "Delete Successfully a Cliente with id = " + clienteId,
+        cliente: cliente,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error -> Can NOT delete a Cliente with id = " + req.params.id,
+      error: error.message,
+    });
+  }
+}
