@@ -17,11 +17,12 @@ router.put('/api/customers/update/:id', customers.updateById);
 router.delete('/api/customers/delete/:id', customers.deleteById);
 
  
-  router.post('/api/clientes/create', clientes.create);
-  router.get('/api/clientes/all', clientes.findAll);
-  router.get('/api/clientes/onebyid/:id', clientes.findOne);
-  router.put('/api/clientes/update/:id', clientes.update);
-  router.delete('/api/clientes/delete/:id', clientes.delete);
+router.post('/api/clientes/create', clientes.create);
+router.get('/api/clientes/all', clientes.retrieveAllClientes);
+router.get('/api/clientes/onebyid/:id', clientes.getClienteById);
+router.put('/api/clientes/update/:id', clientes.updateById);
+router.delete('/api/clientes/delete/:id', clientes.deleteById);
+
 
 router.post('/api/empleados/create', empleados.create);
 router.get('/api/empleados/all', empleados.retrieveAllEmpleados);
