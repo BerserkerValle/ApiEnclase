@@ -6,6 +6,7 @@ const customers = require('../controllers/controller.js');
 const empleados = require('../controllers/empleado.js')
 const departamentos = require('../controllers/departamento.js');
 const clientes = require('../controllers/cliente.js');
+const proveedores = require('../controllers/proveedor.js');
 
 
 router.post('/api/customers/create', customers.create);
@@ -22,6 +23,12 @@ router.get('/api/clientes/all', clientes.retrieveAllClientes);
 router.get('/api/clientes/onebyid/:id', clientes.getClienteById);
 router.put('/api/clientes/update/:id', clientes.updateById);
 router.delete('/api/clientes/delete/:id', clientes.deleteById);
+
+router.post('/api/proveedores/create', proveedores.create);
+router.get('/api/proveedores/all', proveedores.retrieveAllProveedores);
+router.get('/api/proveedores/onebyid/:id', proveedores.getProveedorById);
+router.put('/api/proveedores/update/:id', proveedores.updateById);
+router.delete('/api/proveedores/delete/:id', proveedores.deleteById);
 
 
 router.post('/api/empleados/create', empleados.create);
