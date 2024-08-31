@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
-    const Cliente = sequelize.define('cliente', { 
+    const Cliente = sequelize.define('cliente', {
       id_cliente: {
-        type: Sequelize.NUMERIC,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
       },
@@ -30,8 +30,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE
       },
       estatus: {
-        type: Sequelize.NUMERIC
+        type: Sequelize.INTEGER
       }
+    }, {
+      timestamps: true
     });
   
     return Cliente;
