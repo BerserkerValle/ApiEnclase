@@ -7,6 +7,7 @@ const empleados = require('../controllers/empleado.js')
 const departamentos = require('../controllers/departamento.js');
 const clientes = require('../controllers/cliente.js');
 const proveedores = require('../controllers/proveedor.js');
+const productos = require('../controllers/producto.js');
 
 
 router.post('/api/customers/create', customers.create);
@@ -17,6 +18,12 @@ router.get('/api/customers/pagination', customers.pagination);
 router.get('/api/customers/pagefiltersort', customers.pagingfilteringsorting);
 router.put('/api/customers/update/:id', customers.updateById);
 router.delete('/api/customers/delete/:id', customers.deleteById);
+
+router.post('/api/productos/create', productos.create);
+router.get('/api/productos/all', productos.retrieveAllProductos);
+router.get('/api/productos/onebyid/:id', productos.getProductoById);
+router.put('/api/productos/update/:id', productos.updateById);
+router.delete('/api/productos/delete/:id', productos.deleteById);
 
 router.post('/api/clientes/create', clientes.create);
 router.get('/api/clientes/all', clientes.retrieveAllClientes);
