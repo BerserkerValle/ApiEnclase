@@ -1,5 +1,5 @@
 const db = require("../models");
-const Cliente = db.Cliente; // Asegúrate de que aquí esté 'Cliente' con mayúscula
+const Cliente = db.Cliente; 
 
 exports.create = (req, res) => {
   let cliente = {};
