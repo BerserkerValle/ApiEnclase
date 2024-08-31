@@ -5,7 +5,7 @@ let router = express.Router();
 const customers = require('../controllers/controller.js');
 const empleados = require('../controllers/empleado.js')
 const departamentos = require('../controllers/departamento.js');
-const clientes = require('../controllers/cliente.js');
+
 
 router.post('/api/customers/create', customers.create);
 router.get('/api/customers/all', customers.retrieveAllCustomers);
@@ -16,11 +16,6 @@ router.get('/api/customers/pagefiltersort', customers.pagingfilteringsorting);
 router.put('/api/customers/update/:id', customers.updateById);
 router.delete('/api/customers/delete/:id', customers.deleteById);
 
-router.post('/api/clientes/create', clientes.create);
-router.get('/api/clientes/all', clientes.retrieveAllClientes);
-router.get('/api/clientes/onebyid/:id', clientes.getClienteById);
-router.put('/api/clientes/update/:id', clientes.updateById);
-router.delete('/api/clientes/delete/:id', clientes.deleteById);
 
 
 router.post('/api/empleados/create', empleados.create);
